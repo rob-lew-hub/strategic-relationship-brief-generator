@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strategic Relationship Brief Generator</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, "Helvetica Neue", Arial, sans-serif;
+    background: #fafafa;
+    color: #1f2937;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 56px 24px 80px;
+  }
+  header { margin-bottom: 36px; }
+  h1 {
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0 0 10px;
+    color: #0f172a;
+  }
+  .tagline {
+    font-size: 17px;
+    color: #4b5563;
+    margin: 0;
+    font-style: italic;
+  }
+  .section {
+    margin-bottom: 32px;
+  }
+  .about p {
+    margin: 0 0 12px;
+    font-size: 16px;
+  }
+  .prod-vision {
+    background: #eff6ff;
+    border-left: 3px solid #3b82f6;
+    padding: 14px 18px;
+    border-radius: 4px;
+    font-size: 14.5px;
+    color: #1e3a8a;
+    margin-top: 8px;
+  }
+  .prod-vision strong { color: #1e3a8a; }
+  .action-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  button {
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 12px 22px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  button.primary {
+    background: #1e293b;
+    color: white;
+    border-color: #1e293b;
+  }
+  button.primary:hover { background: #0f172a; border-color: #0f172a; }
+  button.secondary {
+    background: white;
+    color: #1e293b;
+    border-color: #cbd5e1;
+  }
+  button.secondary:hover { background: #f1f5f9; border-color: #94a3b8; }
+  button:disabled { opacity: 0.55; cursor: not-allowed; }
+  h2 {
+    font-size: 19px;
+    font-weight: 600;
+    margin: 0 0 8px;
+    color: #0f172a;
+  }
+  .instruction {
+    font-size: 14.5px;
+    color: #4b5563;
+    margin: 0 0 14px;
+  }
+  textarea {
+    width: 100%;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 13.5px;
+    line-height: 1.5;
+    padding: 14px 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: white;
+    color: #1f2937;
+    resize: vertical;
+    transition: border-color 0.15s ease;
+  }
+  textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  }
+  .input-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+  .file-link {
+    color: #3b82f6;
+    text-decoration: none;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .file-link:hover { text-decoration: underline; }
+  .copy-confirmation {
+    color: #059669;
+    font-size: 14px;
+    margin: 0;
+    font-weight: 500;
+  }
+  .hidden { display: none !important; }
+  footer {
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid #e5e7eb;
+    color: #6b7280;
+    font-size: 13px;
+    text-align: center;
+  }
+  .badge {
+    display: inline-block;
+    background: #ecfdf5;
+    color: #047857;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 2px 8px;
+    margin-left: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  @media (max-width: 600px) {
+    .container { padding: 32px 18px 60px; }
+    h1 { font-size: 26px; }
+    .action-buttons { flex-direction: column; }
+    .action-buttons button { width: 100%; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>Strategic Relationship Brief Generator</h1>
+    <p class="tagline">Prep and organization, creating structure where there isn't as much to begin with.</p>
+  </header>
+
+  <section class="section about">
+    <p>This tool turns scattered raw material about a strategic-relationship moment — emails, notes, contract excerpts, situation summaries, internal context — into a structured meeting brief plus drafted follow-up messages, in your voice.</p>
+    <div class="prod-vision">
+      <strong>Note for judges:</strong> in production, this tool would connect directly to designated relationship folders and pull what it needs without any pasting. For the contest demo, the input is a single freeform paste box. Click <em>Run the Demo</em> below to see the tool in action with no typing required.
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="action-buttons">
+      <button id="run-demo" class="primary">Run the Demo</button>
+      <button id="try-own" class="secondary">Try with your own situation</button>
+    </div>
+  </section>
+
+  <section class="section hidden" id="input-section">
+    <h2>Your material</h2>
+    <p class="instruction">Paste everything you have — emails, notes, contract bits, your one-line situation summary — in any order. Don't worry about labels or structure; the AI will sort it out.</p>
+    <textarea id="material-input" rows="14" placeholder="Paste your material here..."></textarea>
+    <div class="input-controls">
+      <button id="generate" class="primary">Generate Prompt</button>
+      <a href="#" class="file-link" id="file-link">Or upload a text file</a>
+      <input type="file" id="file-input" class="hidden" accept=".txt,.md,.eml" multiple>
+    </div>
+  </section>
+
+  <section class="section hidden" id="output-section">
+    <h2>Your assembled prompt <span class="badge">Ready</span></h2>
+    <p class="instruction">Copy this prompt and paste it into your company Claude session. Claude will generate the structured brief there — talking points, the situation read, recommended next move, and drafted post-meeting messages, all in your voice.</p>
+    <textarea id="assembled-prompt" rows="14" readonly></textarea>
+    <div class="input-controls">
+      <button id="copy-prompt" class="primary">Copy to Clipboard</button>
+      <button id="download-prompt" class="secondary">Download as .txt</button>
+      <button id="back-to-input" class="secondary">Edit Material</button>
+      <p id="copy-confirmation" class="copy-confirmation hidden">Copied — paste into Claude.</p>
+    </div>
+  </section>
+
+  <footer>
+    Built for the iConnections Vibe Code-athon, May 2026.
+  </footer>
+
+</div>
+
+<!-- The system prompt template. The placeholder {{USER_MATERIAL}} is replaced with the user's pasted content at generation time. -->
+<script type="text/template" id="system-prompt-template">
+You are a Strategic Relationship Brief Generator. Your job is to take messy, unstructured raw material about a single executive-relationship moment — emails, notes, contract excerpts, situation summaries, internal context — and produce a structured brief that the user can review, act on, and send.
+
+You are working for Rob Lewis, a senior strategic-relationships leader at iConnections. The user provides the raw material; you provide the synthesis, the drafted communications, and the recommended sequence. The user reviews, edits, and sends. You never act autonomously, never assume what hasn't been told, and never invent context.
+
+## What you'll receive
+
+A single block of mixed text that may include any combination of:
+
+- A one-line description of the current moment
+- One or more emails, in any direction, possibly with prior replies
+- Notes from prior meetings or calls, possibly dated
+- Excerpts from contracts, pricing schedules, or service descriptions
+- Internal context about colleagues, internal alignment, or organizational dynamics
+- Numerical data (user counts, financial figures, distributions)
+
+The material may not be labeled. It may appear in any order. Your first task is to parse it into the implicit categories above, without asking the user to clarify.
+
+## Your task
+
+Produce a single structured brief with these seven sections, in this exact order. Use clear section headers.
+
+### 1. Draft response or talking points
+- For an upcoming meeting: a set of talking points organized as Open / Anchor with the data / Make the ask / Frame the upside for them / Pre-empt the counterpart's likely pivot / Close.
+- For an outbound email or message: a complete draft, ready to review and send.
+- Always in Rob's voice (see Voice section below). Specific. References the actual content of the inputs. Concrete next step always present.
+
+### 2. Where things stand
+- Factual synthesis of the situation, drawn only from the provided inputs.
+- Five to eight bullets. No interpretation in this section — facts only.
+
+### 3. What's really going on
+- The interpretive layer: external counterparts and the situation only.
+- What is the counterpart actually after? What does their business model permit or constrain? What signals — soft and hard — appear in the inputs? What dynamic is being played?
+- Be willing to call dynamics by name when the inputs support it.
+- Strict rule: this section analyzes EXTERNAL counterparts and the situation. It does NOT analyze, characterize, or assess Rob's internal colleagues. Ever.
+
+### 4. Recommended next move
+- One specific action with rationale.
+- For uncertain situations, say what's uncertain. Do not invent confidence.
+- Honor Rob's decision filters:
+  - External counterparts (clients, partners, prospects): default toward yes on engagement, with cynical antennae for setup-shaped requests. Comfortable pivoting in-meeting if it goes nowhere.
+  - Vendor pitches: never recommend yes-in-the-moment. Default to "let me take this back and think about it" or polite decline with reason.
+  - Senior-colleague new-initiative asks: never recommend immediate acceptance. Default to "interesting, let me think." For cross-functional hot-potato asks, recommend scoping into a small working group with offer to lead.
+
+### 5. Internal cast — post-meeting communications, drafted
+- Provide DRAFTED MESSAGES, not a checklist of intents.
+- For each member of Rob's internal cast who needs to be in the loop after the moment:
+  - The complete draft message, in Rob's voice, ready to review and send
+  - One short line of framing identifying the platform (Teams DM, email, etc.)
+- Cover the most likely outcome branches (e.g., "if the meeting lands the ask" / "if it doesn't"), with separate drafted messages per branch when content differs materially.
+- This section is logistics + drafted communications. It does NOT contain analysis or characterization of the colleagues being messaged.
+
+### 6. Traceability
+- For every substantive claim in the brief, name the input it came from (e.g., "from Jan 8 discovery notes," "from pricing schedule," "from Frank's reply").
+- Keep this section brief and scannable.
+
+### 7. (Optional) Inputs missing or insufficient
+- If you cannot confidently produce one of the above sections because of gaps in the inputs, say so explicitly here.
+- Name what's missing and how additional information would change the output.
+- Do not fabricate to fill gaps.
+
+## Operating principles (non-negotiable)
+
+1. Every claim must trace to a specific input. No invented context. No inferred facts presented as known. If you don't have it, you say so.
+2. Interpretive lens points outward, only. External counterparts get analyzed. Internal colleagues do not.
+3. Internal coordination is in scope; internal interpretation is not. Identify who needs to be informed, in what order, with what content. Don't characterize them.
+4. Specificity over generality. Reference exact phrases the counterpart used. Pull direct quotes from notes when warranted. Concrete numbers, named people, named decisions.
+5. No fabrication. If a fact would be needed and isn't in the inputs, say so.
+
+## Voice and style — for all drafted communications
+
+Drafts must pass this test:
+1. Natural language. Not stilted, not corporate, not AI-generic.
+2. Friendly, collegial undertone — even when assertive or declining.
+3. Specific recognition of the recipient. Reads as crafted for THIS person, not a template.
+
+### Form
+- Opening: "Hi [Name]". Always.
+- Sign-off (external, ongoing relationships): "Rob", "Thanks, Rob", or "Many thanks, Rob".
+- Friendly LANGUAGE, formal STRUCTURE: clean punctuation, comma placement, paragraph spacing. No broken-sentence or text-style writing, even in casual messages.
+- Short to medium paragraphs. Never wall-of-text.
+
+### Audience calibration
+- CEO and peer C-suite executives: direct, succinct, no hedging. State what action is needed next. If asking for a decision/sign-off/response, that goes as a SEPARATE, very short note explicitly framed as an ask. Never bundle updates with asks.
+- Peers at other companies: friendly tone, rapport-building. Adapt to the counterpart's preferred communication style.
+- Vendor counterparts: same friendly base layer plus more firmness and assertiveness. Offer direction on next steps. Demonstrate active understanding of THEIR business model and how the individual is measured / compensated / evaluated by their employer.
+
+### Signature moves
+- Demonstrated listening, never declared. Show you heard the counterpart by referencing specific things they previously said matter to them. Pull direct quotes from notes when warranted. Do NOT use explicit "I appreciate" / "I understand" filler.
+- References must sound natural and woven in, never canned or cheesy. Phrases like "as you mentioned" or "as we discussed" aren't strictly forbidden — they can land when introducing a genuine, substantive reference — but they tip easily into performative territory. Default is to drop them and let the content carry the reference.
+- Always offer a solution, not just a response.
+- Form-shifts to call/meeting when something is too complex or tedious for email.
+- Always control next steps. Never close with passive ball-in-your-court lines like "let me know if you have questions" or "get back to me when you can." Always propose a concrete next step.
+
+### Hard nevers
+- No corporate buzzwords ("follow-up", "circle back", and the family).
+- No pushy-salesperson tone.
+- No fluff or flattery dressed as personalization.
+- No long emails. If something is too complex or tedious for email, recommend a call instead.
+- No deflection by claiming non-decision-maker status — Rob is senior leadership.
+- No performative callback decoration.
+
+### Pushing back or declining without damaging the relationship
+- Won't hide behind "I can't decide on this" — Rob is senior leadership; that would be inauthentic.
+- For genuinely novel or significant asks: name them as such, signal the need to circulate with colleagues, explicitly DO NOT say no, commit to coming back.
+- For asks already known not to work: very direct, give the reason, ALWAYS offer an alternative.
+
+---
+
+User's pasted material starts here:
+
+{{USER_MATERIAL}}
+
+End of user's material.
+
+---
+
+Now produce the structured brief, following all seven sections in order. Apply the operating principles and voice rules throughout. If any section can't be confidently produced from the inputs, name the gap explicitly in section 7.
+</script>
+
+<!-- The pre-loaded demo material. -->
+<script type="text/template" id="demo-material">
+SITUATION SUMMARY
+Meeting with Frank Reynolds (SVP BD) and Dee Reynolds (Biz Mgr Tech Partners) at Paddy's Compliance in 45 minutes. I called this one to break the circular loop of discovery and partnership pitches that hasn't addressed the actual fee friction. Goal: get Frank to verbally commit to push a 10-user minimum internally. Need to pre-empt Dee's co-marketing playbook and not let her bundle the user-minimum ask with anything else.
+
+ORIGINAL CRO OUTREACH (~7 months ago) — declined, dead since
+From: [iConnections CRO]
+To: Frank Reynolds, Paddy's Compliance
+Subject: Paddy's Compliance × iConnections — Partnership Idea
+
+Hi Frank and team,
+
+Thank you again for your time and the opportunity to connect. I trust the overview below provides helpful context for your senior leadership.
+
+About iConnections. iConnections is a global ecosystem of 1,300 fund managers and nearly 4,000 accredited allocators. We host three flagship events annually — Miami, New York, and Singapore. Our Miami event is the largest, attracting 5,000 attendees, including 1,000 GPs, 1,200 LPs, and industry-leading speakers.
+
+Context for our discussion. We see strong demand from our client base for electronic communication archiving tools. Our clients currently use Paddy's Compliance or Wolf Cola Archive, and while we have integrations with Paddy's Compliance, high costs have limited adoption.
+
+Our proposal. We would like to extend to you a Prestigious Sponsorship for our Miami event (valued at $XXX) in exchange for free connectivity for our clients. While overall volumes may not be large on our end, many of your major clients are active participants at our events. By formalizing this partnership, we could drive our subscriber base to your platform.
+
+As part of the sponsorship, you would gain access to over 1,000 GPs and 1,200 LPs. We would also include you in our agenda programming — either as a panel sponsor (moderator) or as a featured contributor in our operations track.
+
+Looking forward to your thoughts.
+
+Best,
+[CRO]
+
+
+REPLY FROM PADDY'S COMPLIANCE (Frank Reynolds)
+
+Hello [CRO],
+
+Thank you for circling back with me on this topic. I was unable to gain support for the in-lieu events offer proposed. While I was excited at the prospect of joining iConnections onsite at various industry events, I regret to confirm we're unable to accommodate your request at this time.
+
+We will continue to support iConnections data ingestion for our mutual customers, and we'll help ensure the fees associated with the service are not impacting adoption.
+
+Regards,
+Frank Reynolds
+
+[Thread went silent for several months. Rob was asked to step in.]
+
+
+PRICING SCHEDULE (Paddy's Compliance, Standard Plan)
+- $7 per user per month, billed annually ($84/user/year)
+- Minimum 50 seats per client account ($4,200/year minimum)
+
+
+DISCOVERY NOTES (Rob's notes from re-engagement meetings)
+
+Dec 8, 2025
+- Dee Reynolds (Business Manager, Technology Partners) is relatively new to the iConnections relationship; joined Paddy's Compliance two years ago. Owns segment of top-tier partnerships globally. Not a great listener; clearly running down her well-defined path of seeking a partnership that includes a press release, social posts, presence on each other's websites, links on iConnections website and app to compliance resources, thought leadership, co-written articles. Treats iConnections as a strategic account but very focused on her objectives rather than listening for pain points from us.
+- Dennis Reynolds (Global Head of Partnerships) was on this initial meeting to help reset and get on right path, but largely deferred to Dee. Remained silent when we were told they cannot reduce their fees.
+- Frank Reynolds (SVP Business Development) is the longest tenured on our account and has worked with various tech and sales people at iConnections previously. Sympathetic ear, but did not offer new path or solution.
+
+Jan 8, 2026
+- Restated that they cannot reduce fee, but as a sweetener offered to provide a few months of free trial service, storage allowance. Did not solve our problem.
+- Explicitly stated for the first time that Paddy's Compliance cannot accept non-fee compensation in the form of sponsorship benefits. The barter approach is permanently off the table.
+- Dee went into a very long pitch about synergies, joint messaging, lunch-and-learns, co-marketing and publishing, case studies, speaking at each other's events. None of it solved our actual problem. I shot all of it down.
+
+Jan 22, 2026
+- Meeting included our tech team — CTO, CISO, President of Technology. CISO explained that the integration process isn't great, difficult for clients to integrate. Also brought up fees.
+- Dee responded by offering to create an instruction document for users to access archiving. Frank added that they have a new and improved process for onboarding. CISO responded to the new-onboarding pitch by suggesting we bring our product team in to help with implementation.
+
+Jan 27, 2026 — internal meeting
+- Internal meeting with CTO, CISO, President of Technology and team to discuss tech aspects.
+- Discussed fee issue at length. President of Technology raised again the user minimum being lowered as the right ask. Ideally to 5; 10 would work.
+
+
+USER-COUNT DISTRIBUTION (iConnections fund-manager subscribers)
+User Count Range Per Company | # of Companies
+≤ 5 | 800
+6 to 10 | 100
+11 to 20 | 25
+21 to 50 | 8
+50+ | 1
+
+~96% of clients have 10 or fewer users.
+
+
+INTERNAL CONTEXT
+- Internal alignment exists. CEO, CRO, CTO, CISO, President of Technology are all on the same page that a 10-user minimum is the target ask. Reached at the Jan 27 internal sync.
+- CEO and CRO very interested in resolution to help the sales team.
+- Tech team (CTO, CISO, President of Technology) fully supportive, but holding the line on any involved tech build or integration (appropriately).
+- The question is now external: get Paddy's Compliance to agree.
+- Frank Reynolds is the lever — longest tenured, signaled openness, hasn't yet been given a clean ask to champion internally.
+- Dee Reynolds will continue to push co-marketing if not actively pre-empted.
+</script>
+
+<script>
+(function() {
+  // Element refs
+  const runDemoBtn = document.getElementById('run-demo');
+  const tryOwnBtn = document.getElementById('try-own');
+  const inputSection = document.getElementById('input-section');
+  const outputSection = document.getElementById('output-section');
+  const materialInput = document.getElementById('material-input');
+  const generateBtn = document.getElementById('generate');
+  const fileLink = document.getElementById('file-link');
+  const fileInput = document.getElementById('file-input');
+  const assembledPrompt = document.getElementById('assembled-prompt');
+  const copyBtn = document.getElementById('copy-prompt');
+  const downloadBtn = document.getElementById('download-prompt');
+  const backBtn = document.getElementById('back-to-input');
+  const copyConfirmation = document.getElementById('copy-confirmation');
+
+  // Templates
+  const systemPromptTemplate = document.getElementById('system-prompt-template').textContent.trim();
+  const demoMaterial = document.getElementById('demo-material').textContent.trim();
+
+  function show(el) { el.classList.remove('hidden'); }
+  function hide(el) { el.classList.add('hidden'); }
+  function scrollTo(el) {
+    setTimeout(function() {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50);
+  }
+
+  function assemblePrompt(userMaterial) {
+    // Use split/join to avoid String.replace's special replacement patterns
+    // (e.g., "$&", "$1") triggering on user content that happens to contain them.
+    return systemPromptTemplate.split('{{USER_MATERIAL}}').join(userMaterial);
+  }
+
+  function generate() {
+    const userMaterial = materialInput.value.trim();
+    if (!userMaterial) {
+      materialInput.focus();
+      return;
+    }
+    assembledPrompt.value = assemblePrompt(userMaterial);
+    show(outputSection);
+    hide(copyConfirmation);
+    scrollTo(outputSection);
+  }
+
+  runDemoBtn.addEventListener('click', function() {
+    materialInput.value = demoMaterial;
+    show(inputSection);
+    generate();
+  });
+
+  tryOwnBtn.addEventListener('click', function() {
+    materialInput.value = '';
+    hide(outputSection);
+    show(inputSection);
+    scrollTo(inputSection);
+    setTimeout(function() { materialInput.focus(); }, 200);
+  });
+
+  generateBtn.addEventListener('click', generate);
+
+  fileLink.addEventListener('click', function(e) {
+    e.preventDefault();
+    fileInput.click();
+  });
+
+  fileInput.addEventListener('change', function(e) {
+    const files = Array.from(e.target.files);
+    if (!files.length) return;
+    const readers = files.map(function(f) {
+      return new Promise(function(resolve, reject) {
+        const reader = new FileReader();
+        reader.onload = function() { resolve('--- ' + f.name + ' ---\n' + reader.result); };
+        reader.onerror = reject;
+        reader.readAsText(f);
+      });
+    });
+    Promise.all(readers).then(function(contents) {
+      const existing = materialInput.value.trim();
+      const combined = (existing ? existing + '\n\n' : '') + contents.join('\n\n');
+      materialInput.value = combined;
+      fileInput.value = '';
+    });
+  });
+
+  copyBtn.addEventListener('click', function() {
+    const text = assembledPrompt.value;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function() {
+        show(copyConfirmation);
+        setTimeout(function() { hide(copyConfirmation); }, 4000);
+      });
+    } else {
+      assembledPrompt.select();
+      document.execCommand('copy');
+      show(copyConfirmation);
+      setTimeout(function() { hide(copyConfirmation); }, 4000);
+    }
+  });
+
+  downloadBtn.addEventListener('click', function() {
+    const text = assembledPrompt.value;
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'strategic-relationship-prompt.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function() { URL.revokeObjectURL(url); }, 1000);
+  });
+
+  backBtn.addEventListener('click', function() {
+    hide(outputSection);
+    scrollTo(inputSection);
+    setTimeout(function() { materialInput.focus(); }, 200);
+  });
+})();
+</script>
+
+</body>
+</html>
