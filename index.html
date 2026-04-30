@@ -50,6 +50,16 @@
     margin-top: 8px;
   }
   .prod-vision strong { color: #1e3a8a; }
+  .how-list {
+    margin: 0;
+    padding-left: 24px;
+  }
+  .how-list li {
+    margin-bottom: 10px;
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  .how-list li strong { color: #0f172a; }
   .action-buttons {
     display: flex;
     gap: 12px;
@@ -166,10 +176,20 @@
   </header>
 
   <section class="section about">
-    <p>This tool turns scattered raw material about a strategic-relationship moment — emails, notes, contract excerpts, situation summaries, internal context — into a structured meeting brief plus drafted follow-up messages, in your voice.</p>
+    <p>For senior leaders running high-stakes external relationships — clients, partners, vendors — and the cross-functional internal coordination required to advance them. The tool ingests scattered raw material (emails, notes, contract excerpts, situation summaries, internal context) and produces a structured pre-meeting brief plus drafted post-meeting messages, in the user's voice. Roughly 60 seconds of synthesis in place of 30+ minutes of manual context-staging between meetings.</p>
     <div class="prod-vision">
-      <strong>Note for judges:</strong> in production, this tool would connect directly to designated relationship folders and pull what it needs without any pasting. For the contest demo, the input is a single freeform paste box. Click <em>Run the Demo</em> below to see the tool in action with no typing required.
+      <strong>Note for judges:</strong> in production, this would connect directly to the user's relationship folders (Outlook, Teams, OneDrive) and pull what it needs without manual paste. For the contest demo, the input is a single freeform paste box and the output is a structured prompt the user runs in their own Claude session. Click <em>Run the Demo</em> below — zero typing required.
     </div>
+  </section>
+
+  <section class="section how-it-works">
+    <h2>How the demo works</h2>
+    <ol class="how-list">
+      <li>Click <strong>Run the Demo</strong> below. The input box auto-fills with a realistic fictional situation — a senior leader prepping for a high-stakes meeting.</li>
+      <li>Click <strong>Download as .txt</strong> (recommended) or <strong>Copy to Clipboard</strong>.</li>
+      <li>Open a fresh Claude conversation; attach the .txt file or paste the prompt.</li>
+      <li>Wait roughly 60 seconds. Claude generates a seven-section structured brief — talking points, situation synthesis, interpretive read on the counterpart, recommended next move, drafted post-meeting messages (internal and external, both outcome branches), per-claim traceability, and any input gaps the AI couldn't fill confidently.</li>
+    </ol>
   </section>
 
   <section class="section">
